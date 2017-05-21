@@ -181,6 +181,8 @@ void DHTMessage::DecodeQuery(BencodedDict &bDict)
 		if (infoHash.len != DHT_ID_SIZE) _argumentsAreValid = false;
 		portNum = args->GetInt("port", -1);
 		token.b = (byte*)args->GetString("token", &token.len);
+		// https://github.com/bittorrent/libbtdht/issues/1
+		if (token.len != 20) _argumentsAreValid = false;
 		filename.b = (byte*)args->GetString("name", &filename.len);
 		seed = args->GetInt("seed", 0);
 		impliedPort = args->GetInt("implied_port", 0);
@@ -190,6 +192,8 @@ void DHTMessage::DecodeQuery(BencodedDict &bDict)
 		target.b = (byte*)args->GetString("target", &target.len);
 		if (target.len != DHT_ID_SIZE) _argumentsAreValid = false;
 		token.b = (byte*)args->GetString("token", &token.len);
+		// https://github.com/bittorrent/libbtdht/issues/1
+		if (token.len != 20) _argumentsAreValid = false;
 		vote = args->GetInt("vote", 0);
 		filename.b = (byte*)args->GetString("name", &filename.len);
 	}
@@ -202,6 +206,8 @@ void DHTMessage::DecodeQuery(BencodedDict &bDict)
 	else if (strcmp(command,"put") == 0) {
 		dhtCommand = DHT_QUERY_PUT;
 		token.b = (byte*)args->GetString("token", &token.len);
+		// https://github.com/bittorrent/libbtdht/issues/1
+		if (token.len != 20) _argumentsAreValid = false;
 		vBuf.len = region.second - region.first;
 		vBuf.b = region.first;
 		signature.b = (byte*)args->GetString("sig", &signature.len); // 64 bytes
